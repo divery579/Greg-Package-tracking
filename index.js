@@ -1,8 +1,9 @@
 const express = require('express');
+const path = require('path');
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-
 app.get('/', (req, res) => {
   res.send('Package Tracker API is running!');
 });
@@ -31,7 +32,7 @@ const trackingData = {
 };
 
 // Root route
-app.use(express.static(path.join(__dirname, 'public')));
+const path = require('path');
 
 // Track route
 app.get('/track', (req, res) => {
