@@ -25,9 +25,7 @@ const trackingData = {
 };
 
 // Root route
-app.get('/', (req, res) => {
-  res.send('📦 Greg’s Package Tracker is live!');
-});
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Track route
 app.get('/track', (req, res) => {
