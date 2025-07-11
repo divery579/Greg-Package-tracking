@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Greg's Package Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>📦 Greg’s Package Tracker</h1>
+  <p>Enter your tracking code below:</p>
+  <input type="text" id="codeInput" placeholder="e.g. ABC123" />
+  <button onclick="trackPackage()">Track</button>
+  <div class="result" id="result"></div>
+
+  <script>
+    async function trackPackage() {
+      const code = document.getElementById('codeInput').value;
+      const resultDiv = document.getElementById('result');
+
+      if (!code) {
+        resultDiv.textContent = '❗ Please enter a tracking code.';
+        return;
+      }
+
+      resultDiv.textContent = '⏳ Tracking...';
+
+      try {
+        const res = await fetch(`/track?code=${code}`);
+        if (!res.ok) throw new Error('Not found');
+
+        const data = await res.json();
+        resultDiv.innerHTML = `
+          <p>Status: ${data.status}</p>
+          <p>History:</p>
+          <ul>${data.history.map(step => `<li>${step}</li>`).join('')}</ul>
+        `;
+      } catch {
+        resultDiv.textContent = '❌ Tracking code not found.';
+      }
+    }
+  </script>
+</body>
+</html>
