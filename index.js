@@ -36,13 +36,12 @@ app.get("/receipt", (req, res) => {
 });
 
 // Sample test data
-packageDatabase["XYZ2789"] = {
-  trackingCode: "XYZ2789",
-  status: "Out for delivery",
-  location: "Main Street, Warrenton MO",
-  history: ["Shipped", "In transit", "Out for delivery"],
+packageDatabase["PEND1234"] = {
+  trackingCode: "PEND1234",
+  status: "Pending",
+  location: "Label Created",
+  history: ["Label created, not yet shipped"],
 };
-
 // Add/Update package
 app.post("/admin/update", (req, res) => {
   const { code, data } = req.body;
