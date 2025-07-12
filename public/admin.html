@@ -13,11 +13,18 @@
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0; }
     .stat-card { background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border-left: 5px solid #007bff; }
     .stat-number { font-size: 36px; font-weight: bold; color: #007bff; }
-    .recent-activity { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .recent-activity { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 20px; }
     .activity-item { padding: 10px 0; border-bottom: 1px solid #eee; }
     .login-form { background: #f8f9fa; padding: 30px; border-radius: 10px; max-width: 400px; margin: 50px auto; }
     .login-form input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
     .login-form button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .admin-section { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .management-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+    .management-card { background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #007bff; }
+    .search-input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    .action-btn { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 5px; }
+    .action-btn:hover { background: #218838; }
+    .search-results { margin-top: 10px; padding: 10px; background: white; border-radius: 4px; min-height: 40px; }
     .hidden { display: none; }
   </style>
 </head>
@@ -66,6 +73,46 @@
       </div>
     </div>
 
+    <div class="admin-section">
+      <h3>📦 Package Management</h3>
+      
+      <div class="management-grid">
+        <div class="management-card">
+          <h4>🔍 Search Database</h4>
+          <input type="text" id="searchCode" placeholder="Enter tracking code" class="search-input">
+          <button onclick="searchPackage()" class="action-btn">Search</button>
+          <div id="searchResults" class="search-results"></div>
+        </div>
+
+        <div class="management-card">
+          <h4>📝 Update Package Status</h4>
+          <input type="text" id="updateCode" placeholder="Tracking code" class="search-input">
+          <select id="statusSelect" class="search-input">
+            <option value="Package received">Package received</option>
+            <option value="In transit">In transit</option>
+            <option value="Out for delivery">Out for delivery</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Delayed">Delayed</option>
+          </select>
+          <button onclick="updateStatus()" class="action-btn">Update Status</button>
+        </div>
+
+        <div class="management-card">
+          <h4>📅 Assign Delivery Date</h4>
+          <input type="text" id="deliveryCode" placeholder="Tracking code" class="search-input">
+          <input type="date" id="deliveryDate" class="search-input">
+          <button onclick="assignDelivery()" class="action-btn">Set Delivery</button>
+        </div>
+
+        <div class="management-card">
+          <h4>📄 Upload Documents</h4>
+          <input type="text" id="docCode" placeholder="Tracking code" class="search-input">
+          <input type="file" id="documentFile" accept=".pdf,.jpg,.png" class="search-input">
+          <button onclick="uploadDocument()" class="action-btn">Upload</button>
+        </div>
+      </div>
+    </div>
+
     <div class="recent-activity">
       <h3>📊 Recent Activity</h3>
       <div class="activity-item">📦 Package ABC123 delivered to customer</div>
@@ -97,6 +144,114 @@
     localStorage.removeItem('adminLoggedIn');
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
+  }
+
+  // Package management functions
+  function searchPackage() {
+    const code = document.getElementById('searchCode').value;
+    if (!code) {
+      alert('Please enter a tracking code');
+      return;
+    }
+    
+    fetch(`/api/admin/search/${code}`)
+      .then(res => res.json())
+      .then(data => {
+        const resultsDiv = document.getElementById('searchResults');
+        if (data.found) {
+          resultsDiv.innerHTML = `
+            <strong>Found:</strong> ${data.trackingCode}<br>
+            <strong>Status:</strong> ${data.status}<br>
+            <strong>Delivery:</strong> ${data.estimatedDelivery}<br>
+            ${data.receipt ? `<a href="/api/receipt/${data.trackingCode}" target="_blank">📄 Download Receipt</a>` : ''}
+          `;
+        } else {
+          resultsDiv.innerHTML = '<span style="color: #dc3545;">Package not found</span>';
+        }
+      })
+      .catch(() => {
+        document.getElementById('searchResults').innerHTML = '<span style="color: #dc3545;">Search failed</span>';
+      });
+  }
+
+  function updateStatus() {
+    const code = document.getElementById('updateCode').value;
+    const status = document.getElementById('statusSelect').value;
+    
+    if (!code) {
+      alert('Please enter a tracking code');
+      return;
+    }
+    
+    fetch('/api/admin/update-status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trackingCode: code, status: status })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert('Status updated successfully');
+        document.getElementById('updateCode').value = '';
+      } else {
+        alert('Failed to update status');
+      }
+    });
+  }
+
+  function assignDelivery() {
+    const code = document.getElementById('deliveryCode').value;
+    const date = document.getElementById('deliveryDate').value;
+    
+    if (!code || !date) {
+      alert('Please enter both tracking code and delivery date');
+      return;
+    }
+    
+    fetch('/api/admin/assign-delivery', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trackingCode: code, deliveryDate: date })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert('Delivery date assigned successfully');
+        document.getElementById('deliveryCode').value = '';
+        document.getElementById('deliveryDate').value = '';
+      } else {
+        alert('Failed to assign delivery date');
+      }
+    });
+  }
+
+  function uploadDocument() {
+    const code = document.getElementById('docCode').value;
+    const fileInput = document.getElementById('documentFile');
+    
+    if (!code || !fileInput.files[0]) {
+      alert('Please enter tracking code and select a file');
+      return;
+    }
+    
+    const formData = new FormData();
+    formData.append('trackingCode', code);
+    formData.append('document', fileInput.files[0]);
+    
+    fetch('/api/admin/upload-document', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert('Document uploaded successfully');
+        document.getElementById('docCode').value = '';
+        fileInput.value = '';
+      } else {
+        alert('Failed to upload document');
+      }
+    });
   }
 
   // Check if already logged in
