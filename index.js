@@ -1,8 +1,7 @@
 const express = require("express");
-const app = express();
 const path = require("path");
-
-const PORT = process.env.PORT || 3000;
+const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(express.static("public")); // Serve frontend files
 app.use(express.json()); // Parse JSON body
@@ -55,8 +54,8 @@ app.post("/admin/update", (req, res) => {
   packageDatabase[code] = data;
   res.json({ message: "Package data updated." });
 });
-    data.status = "Pending";
-  // Track package by code
+
+// Track package by code
 app.get("/track/:code", (req, res) => {
   const code = req.params.code;
 
@@ -71,61 +70,7 @@ app.get("/track/:code", (req, res) => {
 
   res.json(data);
 });
-    return res.status(404).json({ error: "Tracking code not found" });
-  }
 
-  res.json(data);
-}); // ✅ This correctly closes the app.get block{
-  const code = req.params.code;
-
-  if (!isValidCode(code)) {
-    return res.status(400).json({ error: "Invalid tracking code" });
-  }
-
-  const packageData = packageDatabase[code];
-
-  if (packageData) {
-    res.status(200).json(packageData);
-  } else {
-    res.status(404).json({ error: "Package not found" });
-  }
-});
-
-// Get receipt
-app.get("/receipt/:code", (req, res) => {
-  const code = req.params.code;
-
-  if (!isValidCode(code)) {
-    return res.status(400).json({ error: "Invalid tracking code" });
-  }
-
-  const packageData = packageDatabase[code];
-
-  if (packageData) {
-    res.status(200).json({ receipt: true, ...packageData });
-  } else {
-    res.status(404).json({ error: "Package not found" });
-  }
-});
-
-// Get status
-app.get("/status/:code", (req, res) => {
-  const code = req.params.code;
-
-  if (!isValidCode(code)) {
-    return res.status(400).json({ error: "Invalid tracking code" });
-  }
-
-  const packageData = packageDatabase[code];
-
-  if (packageData) {
-    res.status(200).json({ status: packageData.status });
-  } else {
-    res.status(404).json({ error: "Package not found" });
-  }
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
