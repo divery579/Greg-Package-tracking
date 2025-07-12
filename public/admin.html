@@ -43,7 +43,7 @@
     <input type="password" id="password" placeholder="Password" />
     <button onclick="login()">Login</button>
     <p style="font-size: 12px; color: #666; margin-top: 20px;">
-      Demo credentials: admin / admin123
+      Demo credentials: admin / Admin1010
     </p>
   </div>
 
@@ -129,7 +129,7 @@
     const password = document.getElementById('password').value;
     
     // Simple demo authentication
-    if (username === 'admin' && password === 'admin123') {
+    if (username === 'admin' && password === 'Admin1010') {
       document.getElementById('loginForm').classList.add('hidden');
       document.getElementById('adminDashboard').classList.remove('hidden');
       localStorage.setItem('adminLoggedIn', 'true');

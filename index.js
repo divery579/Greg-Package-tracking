@@ -45,6 +45,13 @@ const packageDatabase = {
     history: ['Package received', 'In transit', 'Out for delivery'],
     estimatedDelivery: '2024-01-20',
     receipt: false
+  },
+  'Gg10122520': {
+    trackingCode: 'Gg10122520',
+    status: 'In transit',
+    history: ['Package received', 'Departed facility', 'In transit to destination'],
+    estimatedDelivery: '2024-01-25',
+    receipt: false
   }
 };
 
