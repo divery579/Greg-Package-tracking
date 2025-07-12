@@ -2,16 +2,11 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-
 const PORT = process.env.PORT || 3000;
-app.get('/', (req, res) => {
-  res.send('Package Tracker API is running!');
-});
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
-// Sample tracking data (can later be replaced with MongoDB)
+// Serve static HTML from the "public" folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 const trackingData = {
   "ABC123": {
     status: "In transit",
@@ -31,9 +26,7 @@ const trackingData = {
   }
 };
 
-// Root route
-
-// Track route
+// API route
 app.get('/track', (req, res) => {
   const code = req.query.code;
   const data = trackingData[code];
@@ -43,4 +36,8 @@ app.get('/track', (req, res) => {
   } else {
     res.status(404).json({ error: "Tracking code not found" });
   }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
