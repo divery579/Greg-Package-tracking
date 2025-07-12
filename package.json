@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  "deploy": "esbuild js/app.js --bundle --minify --target=es2017 --outdir=../priv/static/assets"
+  "start": "node index.js"
+},
+"dependencies": {
+  "express": "^4.18.2"
 }
