@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Package Tracker - Track Package</title>
+  <style>
+    body { font-family: Arial; margin: 0; padding: 0; }
+    .navbar { background: #333; padding: 15px; }
+    .navbar a { color: white; text-decoration: none; margin-right: 20px; }
+    .navbar a:hover { text-decoration: underline; }
+    .container { text-align: center; margin-top: 50px; padding: 20px; }
+    input { padding: 10px; width: 300px; margin: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .tracking-form { background: #f9f9f9; padding: 30px; margin: 20px auto; max-width: 500px; border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/tracking.html">Track Package</a>
+    <a href="/results.html">Tracking Results</a>
+    <a href="/admin.html">Admin Dashboard</a>
+    <a href="/support.html">Support</a>
+  </nav>
+
+  <div class="container">
+    <h1>📦 Track Your Package</h1>
+    <div class="tracking-form">
+      <h2>Enter Tracking Information</h2>
+      <input id="code" placeholder="Enter tracking code (e.g. ABC123)" />
+      <br>
+      <button onclick="trackPackage()">Track Package</button>
+    </div>
+  </div>
+
+  <script>
+  function trackPackage() {
+    const trackingCode = document.querySelector('#code').value;
+    if (!trackingCode) {
+      alert('Please enter a tracking code');
+      return;
+    }
+    
+    // Store tracking code in localStorage and redirect
+    localStorage.setItem('currentTrackingCode', trackingCode);
+    window.location.href = '/results.html';
+  }
+  </script>
+</body>
+</html>

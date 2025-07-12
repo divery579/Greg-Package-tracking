@@ -1,9 +1,31 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Serve frontend files from the public directory
 app.use(express.static('public'));
+
+// Route handlers for different pages
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/tracking.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'tracking.html'));
+});
+
+app.get('/results.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'results.html'));
+});
+
+app.get('/admin.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+app.get('/support.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'support.html'));
+});
 
 // API endpoint for tracking package
 app.get('/api/track/:code', (req, res) => {

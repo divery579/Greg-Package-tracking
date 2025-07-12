@@ -1,38 +1,51 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Package Tracker</title>
+  <title>Package Tracker - Home</title>
   <style>
-    body { font-family: Arial; text-align: center; margin-top: 50px; }
-    input { padding: 10px; width: 300px; }
-    button { padding: 10px 20px; }
-    pre { text-align: left; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; background: #f9f9f9; padding: 15px; border: 1px solid #ccc; }
+    body { font-family: Arial; margin: 0; padding: 0; }
+    .navbar { background: #333; padding: 15px; }
+    .navbar a { color: white; text-decoration: none; margin-right: 20px; }
+    .navbar a:hover { text-decoration: underline; }
+    .container { text-align: center; margin-top: 50px; padding: 20px; }
+    .hero { background: #f4f4f4; padding: 50px; margin: 20px; border-radius: 10px; }
+    .features { display: flex; justify-content: center; gap: 30px; margin: 40px 0; }
+    .feature { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 250px; }
+    .cta-button { background: #007bff; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px; }
+    .cta-button:hover { background: #0056b3; }
   </style>
 </head>
 <body>
-  <h1>📦 Package Tracker</h1>
-  <input id="code" placeholder="Enter tracking code (e.g. ABC123)" />
-  <button onclick="trackPackage()">Track</button>
-  <pre id="result"></pre>
+  <nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/tracking.html">Track Package</a>
+    <a href="/results.html">Tracking Results</a>
+    <a href="/admin.html">Admin Dashboard</a>
+    <a href="/support.html">Support</a>
+  </nav>
 
-  <script>
-  function trackPackage() {
-    const trackingCode = document.querySelector('input').value;
+  <div class="container">
+    <div class="hero">
+      <h1>📦 Welcome to Package Tracker</h1>
+      <p>Track your packages easily and efficiently with our advanced tracking system.</p>
+      <a href="/tracking.html" class="cta-button">Start Tracking</a>
+    </div>
 
-    fetch(`/api/track/${trackingCode}`)
-      .then(res => res.json())
-      .then(data => {
-        const output = `
-          <pre>
-Tracking Code: ${data.trackingCode}
-Status: ${data.status}
-Estimated Delivery: ${data.estimatedDelivery}
-
-History:
-${data.history.map(h => `- ${h}`).join('\n')}
-          </pre>
-        `;
-        document.getElementById('result').innerHTML = output;
-      });
-  }
-</script>
+    <div class="features">
+      <div class="feature">
+        <h3>🚚 Real-time Tracking</h3>
+        <p>Get live updates on your package location and delivery status.</p>
+      </div>
+      <div class="feature">
+        <h3>📱 Easy to Use</h3>
+        <p>Simple interface that works on all devices and platforms.</p>
+      </div>
+      <div class="feature">
+        <h3>🔔 Notifications</h3>
+        <p>Stay informed with timely updates about your deliveries.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Package Tracker - Admin Dashboard</title>
+  <style>
+    body { font-family: Arial; margin: 0; padding: 0; }
+    .navbar { background: #333; padding: 15px; }
+    .navbar a { color: white; text-decoration: none; margin-right: 20px; }
+    .navbar a:hover { text-decoration: underline; }
+    .container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+    .admin-header { background: #dc3545; color: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0; }
+    .stat-card { background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border-left: 5px solid #007bff; }
+    .stat-number { font-size: 36px; font-weight: bold; color: #007bff; }
+    .recent-activity { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .activity-item { padding: 10px 0; border-bottom: 1px solid #eee; }
+    .login-form { background: #f8f9fa; padding: 30px; border-radius: 10px; max-width: 400px; margin: 50px auto; }
+    .login-form input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+    .login-form button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/tracking.html">Track Package</a>
+    <a href="/results.html">Tracking Results</a>
+    <a href="/admin.html">Admin Dashboard</a>
+    <a href="/support.html">Support</a>
+  </nav>
+
+  <div id="loginForm" class="login-form">
+    <h2>🔐 Admin Login</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <p style="font-size: 12px; color: #666; margin-top: 20px;">
+      Demo credentials: admin / admin123
+    </p>
+  </div>
+
+  <div id="adminDashboard" class="container hidden">
+    <div class="admin-header">
+      <h1>🛠️ Admin Dashboard</h1>
+      <p>Welcome, Greg! Here's your package tracking overview.</p>
+      <button onclick="logout()" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Logout</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">1,247</div>
+        <div>Total Packages Tracked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">89</div>
+        <div>Active Shipments</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">156</div>
+        <div>Delivered Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">12</div>
+        <div>Delayed Packages</div>
+      </div>
+    </div>
+
+    <div class="recent-activity">
+      <h3>📊 Recent Activity</h3>
+      <div class="activity-item">📦 Package ABC123 delivered to customer</div>
+      <div class="activity-item">🚚 Package XYZ789 out for delivery</div>
+      <div class="activity-item">📋 Package DEF456 arrived at sorting facility</div>
+      <div class="activity-item">🔍 New tracking request for package GHI101</div>
+      <div class="activity-item">📦 Package JKL202 shipped from warehouse</div>
+    </div>
+  </div>
+
+  <script>
+  function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    // Simple demo authentication
+    if (username === 'admin' && password === 'admin123') {
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('adminDashboard').classList.remove('hidden');
+      localStorage.setItem('adminLoggedIn', 'true');
+    } else {
+      alert('Invalid credentials. Try admin / admin123');
+    }
+  }
+
+  function logout() {
+    document.getElementById('loginForm').classList.remove('hidden');
+    document.getElementById('adminDashboard').classList.add('hidden');
+    localStorage.removeItem('adminLoggedIn');
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+  }
+
+  // Check if already logged in
+  window.onload = function() {
+    if (localStorage.getItem('adminLoggedIn') === 'true') {
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('adminDashboard').classList.remove('hidden');
+    }
+  }
+  </script>
+</body>
+</html>

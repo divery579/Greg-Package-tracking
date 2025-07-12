@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Package Tracker - Tracking Results</title>
+  <style>
+    body { font-family: Arial; margin: 0; padding: 0; }
+    .navbar { background: #333; padding: 15px; }
+    .navbar a { color: white; text-decoration: none; margin-right: 20px; }
+    .navbar a:hover { text-decoration: underline; }
+    .container { padding: 20px; max-width: 800px; margin: 0 auto; }
+    .result-card { background: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 10px; border-left: 5px solid #007bff; }
+    .status { font-size: 18px; font-weight: bold; color: #007bff; }
+    .history { background: white; padding: 15px; margin: 15px 0; border-radius: 5px; }
+    .history-item { padding: 8px 0; border-bottom: 1px solid #eee; }
+    .loading { text-align: center; padding: 50px; }
+    .error { color: #dc3545; text-align: center; padding: 20px; }
+    .track-another { text-align: center; margin: 30px 0; }
+    .track-another a { background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/tracking.html">Track Package</a>
+    <a href="/results.html">Tracking Results</a>
+    <a href="/admin.html">Admin Dashboard</a>
+    <a href="/support.html">Support</a>
+  </nav>
+
+  <div class="container">
+    <h1>📦 Tracking Results</h1>
+    <div id="loading" class="loading">Loading tracking information...</div>
+    <div id="result" style="display: none;"></div>
+    <div id="error" class="error" style="display: none;"></div>
+    
+    <div class="track-another">
+      <a href="/tracking.html">Track Another Package</a>
+    </div>
+  </div>
+
+  <script>
+  function loadTrackingResults() {
+    const trackingCode = localStorage.getItem('currentTrackingCode') || 
+                        new URLSearchParams(window.location.search).get('code');
+    
+    if (!trackingCode) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('error').textContent = 'No tracking code provided. Please go back and enter a tracking code.';
+      return;
+    }
+
+    fetch(`/api/track/${trackingCode}`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+        
+        const resultHtml = `
+          <div class="result-card">
+            <h2>Tracking Code: ${data.trackingCode}</h2>
+            <div class="status">Status: ${data.status}</div>
+            <p><strong>Estimated Delivery:</strong> ${data.estimatedDelivery}</p>
+            
+            <div class="history">
+              <h3>📋 Tracking History</h3>
+              ${data.history.map(h => `<div class="history-item">• ${h}</div>`).join('')}
+            </div>
+          </div>
+        `;
+        document.getElementById('result').innerHTML = resultHtml;
+      })
+      .catch(error => {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error').textContent = 'Error loading tracking information. Please try again.';
+      });
+  }
+
+  // Load results when page loads
+  window.onload = loadTrackingResults;
+  </script>
+</body>
+</html>
