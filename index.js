@@ -56,15 +56,21 @@ app.post("/admin/update", (req, res) => {
   res.json({ message: "Package data updated." });
 });
     data.status = "Pending";
+  // Track package by code
+app.get("/track/:code", (req, res) => {
+  const code = req.params.code;
+
+  if (!isValidCode(code)) {
+    return res.status(400).json({ error: "Invalid tracking code" });
   }
 
-  packageDatabase[code] = data;
-  res.json({ message: "Package data updated." });
-});
-}); // ✅ This closing brace was missing
+  const data = packageDatabase[code];
+  if (!data) {
+    return res.status(404).json({ error: "Tracking code not found" });
+  }
 
-// Track package by code
-app.get("/track/:code", (req, res) => {
+  res.json(data);
+}); // ✅ This correctly closes the app.get block{
   const code = req.params.code;
 
   if (!isValidCode(code)) {
