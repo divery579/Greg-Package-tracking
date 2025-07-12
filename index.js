@@ -70,6 +70,11 @@ app.get("/track/:code", (req, res) => {
   }
 
   res.json(data);
+});
+    return res.status(404).json({ error: "Tracking code not found" });
+  }
+
+  res.json(data);
 }); // ✅ This correctly closes the app.get block{
   const code = req.params.code;
 
