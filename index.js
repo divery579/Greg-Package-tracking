@@ -52,8 +52,14 @@ app.post("/admin/update", (req, res) => {
     return res.status(400).json({ error: "Invalid tracking code format" });
   }
 
+  // ✅ Default to "Pending" if no status is provided
+  if (!data.status) {
+    data.status = "Pending";
+  }
+
   packageDatabase[code] = data;
   res.json({ message: "Package data updated." });
+});
 }); // ✅ This closing brace was missing
 
 // Track package by code
