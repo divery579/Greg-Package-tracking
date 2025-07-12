@@ -32,7 +32,6 @@ const trackingData = {
 };
 
 // Root route
-const path = require('path');
 
 // Track route
 app.get('/track', (req, res) => {
@@ -44,8 +43,4 @@ app.get('/track', (req, res) => {
   } else {
     res.status(404).json({ error: "Tracking code not found" });
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
 });
