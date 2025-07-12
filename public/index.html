@@ -16,12 +16,23 @@
   <pre id="result"></pre>
 
   <script>
-    async function track() {
-      const code = document.getElementById('code').value;
-      const res = await fetch(`/track?code=${code}`);
-      const data = await res.json();
-      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
-    }
-  </script>
-</body>
-</html>
+  function trackPackage() {
+    const trackingCode = document.querySelector('input').value;
+
+    fetch(`/api/track/${trackingCode}`)
+      .then(res => res.json())
+      .then(data => {
+        const output = `
+          <pre>
+Tracking Code: ${data.trackingCode}
+Status: ${data.status}
+Estimated Delivery: ${data.estimatedDelivery}
+
+History:
+${data.history.map(h => `- ${h}`).join('\n')}
+          </pre>
+        `;
+        document.getElementById('result').innerHTML = output;
+      });
+  }
+</script>
