@@ -59,5 +59,4 @@ app.post("/admin/update", (req, res) => {
   res.json({ message: "Package data updated" });
 });
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+  console.log("Delivery update sent:", { code, date });
