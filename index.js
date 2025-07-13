@@ -43,32 +43,21 @@ packageDatabase["PEND1234"] = {
   location: "Label Created",
   history: ["Label created, not yet shipped"],
 };
-// Update status
-app.post("/admin/update-status", (req, res) => {
-  const { trackingCode, status } = req.body;
-  if (!isValidCode(trackingCode)) {
-    return res.status(400).json({ success: false, message: "Invalid code" });
-  }
-  if (!packageDatabase[trackingCode]) {
-    packageDatabase[trackingCode] = {};
-  }
-  packageDatabase[trackingCode].status = status;
-  res.json({ success: true });
-});
-
-// Assign delivery date
 app.post("/admin/update", (req, res) => {
   const { code, data } = req.body;
-  if (!isValidCode(code)) {
-    return res.status(400).json({ message: "Invalid code" });
+  if (!code || !data) {
+    return res.status(400).json({ error: "Missing code or data" });
   }
+
+  // Create or update the entry
   if (!packageDatabase[code]) {
     packageDatabase[code] = {};
   }
+
   Object.assign(packageDatabase[code], data);
+
   res.json({ message: "Package data updated" });
 });
-
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
