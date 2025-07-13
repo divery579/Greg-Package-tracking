@@ -199,31 +199,32 @@
   }
 
   function assignDelivery() {
-    const code = document.getElementById('deliveryCode').value;
-    const date = document.getElementById('deliveryDate').value;
-    
-    if (!code || !date) {
-      alert('Please enter both tracking code and delivery date');
-      return;
-    }
-    
-    fetch('/api/admin/assign-delivery', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ trackingCode: code, deliveryDate: date })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        alert('Delivery date assigned successfully');
-        document.getElementById('deliveryCode').value = '';
-        document.getElementById('deliveryDate').value = '';
-      } else {
-        alert('Failed to assign delivery date');
-      }
-    });
+  const code = document.getElementById('deliveryCode').value;
+  const date = document.getElementById('deliveryDate').value;
+
+  if (!code || !date) {
+    alert('Please enter both tracking code and delivery date');
+    return;
   }
 
+  fetch(`/admin/update`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      code: code,
+      data: { deliveryDate: date }
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert('Delivery date assigned successfully');
+    document.getElementById('deliveryCode').value = '';
+    document.getElementById('deliveryDate').value = '';
+  })
+  .catch(() => {
+    alert('Failed to assign delivery date');
+  });
+    }
   function uploadDocument() {
     const code = document.getElementById('docCode').value;
     const fileInput = document.getElementById('documentFile');
