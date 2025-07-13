@@ -43,32 +43,30 @@ packageDatabase["PEND1234"] = {
   location: "Label Created",
   history: ["Label created, not yet shipped"],
 };
-// Add/Update package
-app.post("/admin/update", (req, res) => {
-  const { code, data } = req.body;
-
-  if (!isValidCode(code)) {
-    return res.status(400).json({ error: "Invalid tracking code format" });
+// Update status
+app.post("/admin/update-status", (req, res) => {
+  const { trackingCode, status } = req.body;
+  if (!isValidCode(trackingCode)) {
+    return res.status(400).json({ success: false, message: "Invalid code" });
   }
-
-  packageDatabase[code] = data;
-  res.json({ message: "Package data updated." });
+  if (!packageDatabase[trackingCode]) {
+    packageDatabase[trackingCode] = {};
+  }
+  packageDatabase[trackingCode].status = status;
+  res.json({ success: true });
 });
 
-// Track package by code
-app.get("/track/:code", (req, res) => {
-  const code = req.params.code;
-
+// Assign delivery date
+app.post("/admin/update", (req, res) => {
+  const { code, data } = req.body;
   if (!isValidCode(code)) {
-    return res.status(400).json({ error: "Invalid tracking code" });
+    return res.status(400).json({ message: "Invalid code" });
   }
-
-  const data = packageDatabase[code];
-  if (!data) {
-    return res.status(404).json({ error: "Tracking code not found" });
+  if (!packageDatabase[code]) {
+    packageDatabase[code] = {};
   }
-
-  res.json(data);
+  Object.assign(packageDatabase[code], data);
+  res.json({ message: "Package data updated" });
 });
 
 app.listen(port, () => {
