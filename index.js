@@ -31,6 +31,7 @@ app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "admin.html"));
 });
 
+
 app.get("/receipt", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "receipt.html"));
 });
