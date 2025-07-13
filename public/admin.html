@@ -86,22 +86,21 @@
 
         <div class="management-card">
           <h4>📝 Update Package Status</h4>
-          <input type="text" id="updateCode" placeholder="Tracking code" class="search-input">
-          <select id="status">
+          <input id="updateCode" />
+<select id="statusSelect">
   <option value="Pending">Pending</option>
-  <option value="Shipped">Shipped</option>
-  <option value="In transit">In transit</option>
-  <option value="Out for delivery">Out for delivery</option>
+  <option value="In Transit">In Transit</option>
+  <option value="Out for Delivery">Out for Delivery</option>
+  <option value="Delivered">Delivered</option>
 </select>
-          <button onclick="updateStatus()" class="action-btn">Update Status</button>
-        </div>
+<button onclick="updateStatus()">Update Status</button>
+
 
         <div class="management-card">
           <h4>📅 Assign Delivery Date</h4>
-          <input type="text" id="deliveryCode" placeholder="Tracking code" class="search-input">
-          <input type="date" id="deliveryDate" class="search-input">
-          <button onclick="assignDelivery()" class="action-btn">Set Delivery</button>
-        </div>
+<input id="deliveryCode" />
+<input id="deliveryDate" />
+<button onclick="assignDelivery()">Assign Delivery</button>
 
         <div class="management-card">
           <h4>📄 Upload Documents</h4>
